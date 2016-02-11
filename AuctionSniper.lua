@@ -43,28 +43,27 @@ B_AS_T_LINES		= 3		-- EditBox with many lines
 
 B_AS_S_TYPE		= 1		-- Setting type: BOOL/LIST
 B_AS_S_DEFAULT		= 2		-- Default value (set on first time addon use)
-B_AS_S_GUI			= 3		-- GUI Button element for this setting
+B_AS_S_GUI		= 3		-- GUI Button element for this setting
 B_AS_S_TEXT		= 4		-- Text on the GUI button
 B_AS_S_VALUES		= 5		-- Only LISTs. Array of all possible values
 B_AS_S_RANGE_S		= 6		-- Only LISTs. First item index in array
 B_AS_S_RANGE_E		= 7		-- Only LISTs. Last item index in array
-B_AS_S_CALLBACK	= 8		-- function(newValue) callback when value is changed
+B_AS_S_CALLBACK		= 8		-- function(newValue) callback when value is changed
 
 B_AS_VarSettings = {
-	--						Type			Default		GUI Button						GUI Text		Value names		Value Array Range
-	["AutoScan"]		= {B_AS_T_BOOL,	true,	B_AS_Button_AutoScanToggle,			"AutoScan"										},
-	["AutoBuy"]			= {B_AS_T_BOOL,	true,	B_AS_Button_AutoBuyToggle,			"AutoBuy"										},
-	["AutoSlowBuy"]		= {B_AS_T_BOOL,	false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"										},
-	["PageLock"]  		= {B_AS_T_BOOL,	true,	B_AS_Button_PageLockToggle,			"Last Page"										},
-	["IgnoreLowGear"]	= {B_AS_T_BOOL,	true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"									},
-	["ScanMinQuality"]	= {B_AS_T_LIST,	1,		B_AS_Button_ScanMinQuality,			"Scan Q",		B_AS_QualityList,	1, 5		},
-	["BuyMinQuality"]	= {B_AS_T_LIST,	4,		B_AS_Button_BuyMinQuality,			"Buy Q",		B_AS_QualityList,	1, 5		},
-	["RecipeMinQuality"]= {B_AS_T_LIST,	5,		B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
-	["ScanClass"]		= {B_AS_T_LIST,	0,		B_AS_Button_ScanClass,				"Class",		B_AS_ClassNames,	0, 10		},
-	["Output"] 			= {B_AS_T_BOOL,	false,	B_AS_Button_OutputToggle,			"Debug Output"									},
-
-	["Log"] 			= {B_AS_T_LINES,	{},	B_AS_LogBox																			},
-	["ShowLog"] 		= {B_AS_T_BOOL,	true,																						},
+	--			Type		Default		GUI Button			GUI Text		Value names		Value Array Range
+	["AutoScan"]		= {B_AS_T_BOOL,	true,	B_AS_Button_AutoScanToggle,		"AutoScan"							},
+	["AutoBuy"]		= {B_AS_T_BOOL,	true,	B_AS_Button_AutoBuyToggle,		"AutoBuy"							},
+	["AutoSlowBuy"]		= {B_AS_T_BOOL,	false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"							},
+	["PageLock"]  		= {B_AS_T_BOOL,	true,	B_AS_Button_PageLockToggle,		"Last Page"							},
+	["IgnoreLowGear"]	= {B_AS_T_BOOL,	true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
+	["ScanMinQuality"]	= {B_AS_T_LIST,	1,	B_AS_Button_ScanMinQuality,		"Scan Q",		B_AS_QualityList,	1, 5		},
+	["BuyMinQuality"]	= {B_AS_T_LIST,	4,	B_AS_Button_BuyMinQuality,		"Buy Q",		B_AS_QualityList,	1, 5		},
+	["RecipeMinQuality"]= {B_AS_T_LIST,	5,	B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
+	["ScanClass"]		= {B_AS_T_LIST,	0,	B_AS_Button_ScanClass,			"Class",		B_AS_ClassNames,	0, 10		},
+	["Output"] 		= {B_AS_T_BOOL,	false,	B_AS_Button_OutputToggle,		"Debug Output"							},
+	["Log"] 		= {B_AS_T_LINES,	{},	B_AS_LogBox											},
+	["ShowLog"] 		= {B_AS_T_BOOL,	true,														},
 }
 
 -- AutoBuy and SlowBuy are mutually exclusive
