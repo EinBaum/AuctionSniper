@@ -288,9 +288,12 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 		Ignore items with required lvl between 1 and B_AS_BUY_LEVEL
 		if the option IgnoreLowGear is active
 	]]
-	if (B_AS_GS["IgnoreLowGear"] == true and tonumber(B_AS_GS["LowGearLevel"]) ~= nil) then
-		if (level > 1 and level < tonumber(B_AS_GS["LowGearLevel"])) then
-			return false
+	if (B_AS_GS["IgnoreLowGear"] == true) then
+		local minLevel = tonumber(B_AS_GS["LowGearLevel"])
+		if (minLevel ~= nil) then
+			if (level > 1 and level < minLevel) then
+				return false
+			end
 		end
 	end
 
