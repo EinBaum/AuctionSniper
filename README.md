@@ -31,11 +31,14 @@ Will buy all items that match the filters AT ONCE, e.g. it can buy 10 items at t
 **SlowBuy**
 Same as AutoBuy except that it won't buy more than 1 item every few seconds. Use this instead.
 
-**Last Page**
+**LastPage**
 Scan the last page only because that's where new auctions appear. Will scan all pages if this is disabled.
 
 **IgnoreLowGear**
 Won't buy gear under level 50 (by default) if this is enabled.
+
+**Min. Gear Level**
+Text input where you can set the minimum gear level. Only used if IgnoreLowGear is enabled.
 
 **Scan Q**
 Which item quality to scan for.

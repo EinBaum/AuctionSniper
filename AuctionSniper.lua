@@ -1,4 +1,6 @@
 
+B_AS_VERSION = "1.1"
+
 B_AS_RecipeNames = {
 	"Pattern", "Schematic", "Plans", "Recipe", "Manual", "Formula",
 	"Book", "Codex"
@@ -39,7 +41,8 @@ B_AS_SLOWBUY_RANDOM = 0.5
 
 B_AS_T_BOOL		= 1		-- Button is an ON/OFF toggle button
 B_AS_T_LIST		= 2		-- Button switches between multiple values
-B_AS_T_LINES		= 3		-- EditBox with many lines
+B_AS_T_TEXT		= 3		-- EditBox with just one line
+B_AS_T_LINES		= 4		-- EditBox with many lines
 
 B_AS_S_TYPE		= 1		-- Setting type: BOOL/LIST
 B_AS_S_DEFAULT		= 2		-- Default value (set on first time addon use)
@@ -52,18 +55,19 @@ B_AS_S_CALLBACK		= 8		-- function(newValue) callback when value is changed
 
 B_AS_VarSettings = {
 	--			Type		Default		GUI Button			GUI Text		Value names		Value Array Range
-	["AutoScan"]		= {B_AS_T_BOOL,	true,	B_AS_Button_AutoScanToggle,		"AutoScan"							},
-	["AutoBuy"]		= {B_AS_T_BOOL,	true,	B_AS_Button_AutoBuyToggle,		"AutoBuy"							},
-	["AutoSlowBuy"]		= {B_AS_T_BOOL,	false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"							},
-	["PageLock"]  		= {B_AS_T_BOOL,	true,	B_AS_Button_PageLockToggle,		"Last Page"							},
-	["IgnoreLowGear"]	= {B_AS_T_BOOL,	true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
-	["ScanMinQuality"]	= {B_AS_T_LIST,	1,	B_AS_Button_ScanMinQuality,		"Scan Q",		B_AS_QualityList,	1, 5		},
-	["BuyMinQuality"]	= {B_AS_T_LIST,	4,	B_AS_Button_BuyMinQuality,		"Buy Q",		B_AS_QualityList,	1, 5		},
-	["RecipeMinQuality"]= {B_AS_T_LIST,	5,	B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
-	["ScanClass"]		= {B_AS_T_LIST,	0,	B_AS_Button_ScanClass,			"Class",		B_AS_ClassNames,	0, 10		},
-	["Output"] 		= {B_AS_T_BOOL,	false,	B_AS_Button_OutputToggle,		"Debug Output"							},
+	["AutoScan"]		= {B_AS_T_BOOL,		true,	B_AS_Button_AutoScanToggle,		"AutoScan"							},
+	["AutoBuy"]		= {B_AS_T_BOOL,		true,	B_AS_Button_AutoBuyToggle,		"AutoBuy"							},
+	["AutoSlowBuy"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"							},
+	["PageLock"]  		= {B_AS_T_BOOL,		true,	B_AS_Button_PageLockToggle,		"LastPage"							},
+	["IgnoreLowGear"]	= {B_AS_T_BOOL,		true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
+	["LowGearLevel"]	= {B_AS_T_TEXT,		50,	B_AS_Input_IgnoreLowGearLevel,										},
+	["ScanMinQuality"]	= {B_AS_T_LIST,		1,	B_AS_Button_ScanMinQuality,		"Scan Q",		B_AS_QualityList,	1, 5		},
+	["BuyMinQuality"]	= {B_AS_T_LIST,		4,	B_AS_Button_BuyMinQuality,		"Buy Q",		B_AS_QualityList,	1, 5		},
+	["RecipeMinQuality"]	= {B_AS_T_LIST,		5,	B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
+	["ScanClass"]		= {B_AS_T_LIST,		0,	B_AS_Button_ScanClass,			"Class",		B_AS_ClassNames,	0, 10		},
+	["Output"] 		= {B_AS_T_BOOL,		false,	B_AS_Button_OutputToggle,		"Debug Output"							},
 	["Log"] 		= {B_AS_T_LINES,	{},	B_AS_LogBox											},
-	["ShowLog"] 		= {B_AS_T_BOOL,	true,														},
+	["ShowLog"] 		= {B_AS_T_BOOL,		true,														},
 }
 
 -- AutoBuy and SlowBuy are mutually exclusive
@@ -284,8 +288,8 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 		Ignore items with required lvl between 1 and B_AS_BUY_LEVEL
 		if the option IgnoreLowGear is active
 	]]
-	if (B_AS_GS["IgnoreLowGear"] == true) then
-		if (level > 1 and level < B_AS_BUY_LEVEL) then
+	if (B_AS_GS["IgnoreLowGear"] == true and tonumber(B_AS_GS["LowGearLevel"]) ~= nil) then
+		if (level > 1 and level < tonumber(B_AS_GS["LowGearLevel"])) then
 			return false
 		end
 	end
@@ -315,7 +319,7 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 	]]
 	if B_AS_SpecialsExactConditional[name] then
 		local specialQuality	= B_AS_SpecialsExactConditional[name][1]
-		local minStack			= B_AS_SpecialsExactConditional[name][2]
+		local minStack		= B_AS_SpecialsExactConditional[name][2]
 		if count >= minStack then
 			priceQuality = specialQuality
 		end
@@ -348,6 +352,13 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 		return false
 	end
 
+	-- Do not buy auctions that cost more than you have
+	if (buyPrice > GetMoney()) then
+		-- Warn the user that you need more money
+		B_AS_Print(">>> " .. name .. " too expensive: " .. B_AS_MoneyToText(buyPrice))
+		return false
+	end
+
 	-- Buy the item
 	return true
 end
@@ -359,15 +370,15 @@ end
 function B_AS_SetVar(var, value)
 	B_AS_GS[var] = value
 
-	local settings	= B_AS_VarSettings[var]
-	
+	local settings = B_AS_VarSettings[var]
+
 	if not settings then
 		return
 	end
-	
-	local type		= settings[B_AS_S_TYPE]
-	local gui		= settings[B_AS_S_GUI]
-	local text		= settings[B_AS_S_TEXT]
+
+	local type	= settings[B_AS_S_TYPE]
+	local gui	= settings[B_AS_S_GUI]
+	local text	= settings[B_AS_S_TEXT]
 	local values	= settings[B_AS_S_VALUES]
 	local callback	= settings[B_AS_S_CALLBACK]
 
@@ -386,6 +397,8 @@ function B_AS_SetVar(var, value)
 			else
 				valueText = value
 			end
+		elseif (type == B_AS_T_TEXT) then
+			gui:SetText(value)
 		elseif (type == B_AS_T_LINES) then
 			gui:Clear()
 			for _,v in value do
@@ -459,8 +472,8 @@ function B_AS_OnEvent()
 			for var, value in B_AS_GS do
 				B_AS_SetVar(var, value)
 			end
-			
-			DEFAULT_CHAT_FRAME:AddMessage("AuctionSniper 1.0 loaded.", 0.37, 1, 0)
+
+			DEFAULT_CHAT_FRAME:AddMessage("AuctionSniper " .. B_AS_VERSION .. " loaded.", 0.37, 1, 0)
 		end
 
 	elseif (event == "AUCTION_HOUSE_SHOW") then

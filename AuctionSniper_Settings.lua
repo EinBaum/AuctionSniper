@@ -47,13 +47,6 @@ B_AS_TraderWhitelist = {
 
 
 --[[
-	Will only buy items with this level or higher if the option
-	IgnoreLowGear is on.
-]]
-B_AS_BUY_LEVEL = 50
-
-
---[[
 	Specials:
 	The items in these list will be treated as if they had another quality.
 	The quality here has priority over all other settings.
@@ -64,7 +57,7 @@ B_AS_BUY_LEVEL = 50
 ]]
 B_AS_Specials = {
 	-- Downgrade
-	["Half of Advanced Armorsmithing"]			= 2,	-- 
+	["Half of Advanced Armorsmithing"]			= 2,	--
 	-- Upgrade
 	["Dragon Finger"]					= 4,	-- 100g-600g
 }
@@ -128,7 +121,7 @@ B_AS_SpecialsExact = {
 	["Corehound Belt"]					= 5,	-- 390g
 	["Elementals Deck"]					= 5,	-- 300g - 400g
 	["Nightfall"]						= 5,	--
-	
+
 	["Freezing Band"]					= 5,	-- 380g
 	["Sash of Mercy"]					= 5,	-- 250g
 	["Foror's Compendium of Dragon Slaying"]		= 5,	-- 400g - 800g
@@ -153,7 +146,7 @@ B_AS_SpecialsExact = {
 ]]
 B_AS_SpecialsExactConditional = {
 	["Plaguebloom"]						= {4,	20},		-- 2g
-	
+
 	["Devilsaur Leather"]					= {4,	5},		-- 11g
 	["Core Leather"]					= {4,	8},		-- 6g
 	["Cured Rugged Hide"]					= {4,	8},		-- 6g

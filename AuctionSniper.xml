@@ -208,9 +208,38 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+			<EditBox name="B_AS_Input_IgnoreLowGearLevel" autoFocus="false" letters="2" inherits="InputBoxTemplate">
+				<Size x="30" y="16" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Button_IgnoreLowGearToggle">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlightSmall" text="Min. Gear Level:">
+							<Anchors>
+								<Anchor point="RIGHT" relativeTo="B_AS_Input_IgnoreLowGearLevel" relativePoint="LEFT">
+									<Offset>
+										<AbsDimension x="-10" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnTextChanged>
+						B_AS_SetVar("LowGearLevel", this:GetText())
+					</OnTextChanged>
+				</Scripts>
+			</EditBox>
+
 			<Button name="B_AS_Button_ScanMinQuality" inherits="GameMenuButtonTemplate">
 				<Anchors>
-					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_IgnoreLowGearToggle">
+					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Input_IgnoreLowGearLevel">
 						<Offset>
 							<AbsDimension x="0" y="-15"/>
 						</Offset>
