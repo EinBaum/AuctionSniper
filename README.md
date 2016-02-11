@@ -31,7 +31,7 @@ Will buy all items that match the filters AT ONCE, e.g. it can buy 10 items at t
 **SlowBuy**
 Same as AutoBuy except that it won't buy more than 1 item every few seconds. Use this instead.
 
-**LastBuy**
+**Last Page**
 Scan the last page only because that's where new auctions appear. Will scan all pages if this is disabled.
 
 **IgnoreLowGear**
