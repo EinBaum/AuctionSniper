@@ -1,0 +1,362 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+	<Script file="AuctionSniper.lua"/>
+
+	<!--
+	<EditBox name="B_AS_EditBoxTemplate" letters="4" virtual="true">
+		<Size x="100" y="20" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+					<Size x="75" y="32" />
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset x="-10" y="0" />
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0" right="0.2" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+					<Size x="75" y="32" />
+					<Anchors>
+						<Anchor point="RIGHT">
+							<Offset x="10" y="0" />
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0.7" right="1.0" top="0" bottom="1.0"/>
+				</Texture>
+			</Layer>
+		</Layers>
+		<FontString inherits="ChatFontNormal" />
+	</EditBox>
+	-->
+
+	<Frame name="B_AS_Frame" toplevel="true" parent="UIParent" enableMouse="true" hidden="true">
+
+		<Size>
+			<AbsDimension x="195" y="435"/>
+		</Size>
+
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset>
+					<AbsDimension x="825" y="-112"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+
+		<!--
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="AuctionFrame" relativePoint="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="-2" y="-28"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		-->
+
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture name="B_AS_Header" file="Interface\DialogFrame\UI-DialogBox-Header">
+					<Size>
+						<AbsDimension x="256" y="64"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="12"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<FontString inherits="GameFontNormal" text="AuctionSniper">
+					<Anchors>
+						<Anchor point="TOP" relativeTo="B_AS_Header">
+							<Offset>
+								<AbsDimension x="0" y="-14"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+
+			<Layer level="BACKGROUND">
+			</Layer>
+
+			<Layer level="OVERLAY">
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame name="B_AS_LogBoxContainer">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" relativeTo="$parent">
+					</Anchor>
+					<Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="UIParent">
+					</Anchor>
+				</Anchors>
+
+				<Size>
+					<AbsDimension y="200" />
+				</Size>
+
+				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="11" right="12" top="12" bottom="11"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="32"/>
+					</EdgeSize>
+				</Backdrop>
+
+				<Frames>
+					<ScrollingMessageFrame name="B_AS_LogBox" toplevel="false" maxLines="1024" displayDuration="90000000">
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="B_AS_LogBoxContainer">
+								<Offset>
+									<AbsDimension x="-20" y="-20"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_LogBoxContainer">
+								<Offset>
+									<AbsDimension x="20" y="-20"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="B_AS_LogBoxContainer">
+								<Offset>
+									<AbsDimension x="20" y="20"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_LogBoxContainer">
+								<Offset>
+									<AbsDimension x="-20" y="20"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<FontString inherits="ChatFontNormal" justifyH="LEFT" />
+
+						<Scripts>
+							<OnHyperlinkClick>
+								ChatFrame_OnHyperlinkShow(arg1, arg2, arg3);
+							</OnHyperlinkClick>
+						</Scripts>
+					</ScrollingMessageFrame>
+
+					<Button name="B_AS_Button_LogClear" inherits="GameMenuButtonTemplate" text="Clear Log">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								B_AS_LogClear()
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+
+			<Button name="B_AS_Button_LogToggle" inherits="GameMenuButtonTemplate" text="S|nH|nO|nW|n |nL|nO|nG">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
+					</Anchor>
+				</Anchors>
+				<Size>
+					<AbsDimension x="20" y="130"/>
+				</Size>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("ShowLog")
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Button name="B_AS_Button_AutoScanToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-37"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("AutoScan")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="B_AS_Button_AutoBuyToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_AutoScanToggle">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("AutoBuy")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="B_AS_Button_AutoSlowBuyToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_AutoBuyToggle">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("AutoSlowBuy")
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Button name="B_AS_Button_PageLockToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_AutoSlowBuyToggle">
+						<Offset>
+							<AbsDimension x="0" y="-15"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("PageLock")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="B_AS_Button_IgnoreLowGearToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_PageLockToggle">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("IgnoreLowGear")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="B_AS_Button_ScanMinQuality" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_IgnoreLowGearToggle">
+						<Offset>
+							<AbsDimension x="0" y="-15"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_IncreaseVar("ScanMinQuality")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="B_AS_Button_BuyMinQuality" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_ScanMinQuality">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_IncreaseVar("BuyMinQuality")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="B_AS_Button_RecipeMinQuality" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_BuyMinQuality">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_IncreaseVar("RecipeMinQuality")
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Button name="B_AS_Button_ScanClass" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_RecipeMinQuality">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_IncreaseVar("ScanClass")
+					</OnClick>
+				</Scripts>
+			</Button>
+
+
+			<Button name="B_AS_Button_OutputToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_ScanClass">
+						<Offset>
+							<AbsDimension x="0" y="-15"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						PlaySound("igMainMenuOption");
+
+						B_AS_ToggleVar("Output")
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Button name="B_AS_Button_Scan" inherits="GameMenuButtonTemplate" text="Manual Scan">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_OutputToggle">
+						<Offset>
+							<AbsDimension x="0" y="-15"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						PlaySound("igMainMenuOption");
+
+						B_AS_Scan()
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Button name="B_AS_Button_Buy" inherits="GameMenuButtonTemplate" text="Manual Buy">
+				<Anchors>
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="B_AS_Button_Scan">
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						PlaySound("igMainMenuOption");
+
+						B_AS_Buy(true)
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+
+
+		<Scripts>
+			<OnLoad>
+				B_AS_OnLoad();
+			</OnLoad>
+			<OnEvent>
+				B_AS_OnEvent();
+			</OnEvent>
+			<OnUpdate>
+				B_AS_OnUpdate();
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+</Ui>
