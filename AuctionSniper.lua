@@ -285,7 +285,7 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 	end
 
 	--[[
-		Ignore items with required lvl between 1 and B_AS_BUY_LEVEL
+		Ignore items with required lvl between 1 and LowGearLevel
 		if the option IgnoreLowGear is active
 	]]
 	if (B_AS_GS["IgnoreLowGear"] == true) then
