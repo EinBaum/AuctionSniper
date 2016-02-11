@@ -32,7 +32,7 @@ B_AS_Price = {
 	[2] = 1000,		-- Uncommon	-> 10 Silver
 	[3] = 10000,		-- Rare		-> 1 Gold
 	[4] = 110000,		-- Epic		-> 11 Gold
-	[5] = 2000000,		-- Legend   -> 200 Gold
+	[5] = 2000000,		-- Legend	-> 200 Gold
 	[6] = 5000000		-- Artifact	-> 500 Gold
 }
 
@@ -152,7 +152,7 @@ B_AS_SpecialsExact = {
 	Format: {Quality,	MinimumStackOfItems}
 ]]
 B_AS_SpecialsExactConditional = {
-	["Plaguebloom"]						= {4,	20},	-- 2g
+	["Plaguebloom"]						= {4,	20},		-- 2g
 	
 	["Devilsaur Leather"]					= {4,	5},		-- 11g
 	["Core Leather"]					= {4,	8},		-- 6g
