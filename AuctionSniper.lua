@@ -55,8 +55,8 @@ B_AS_S_CALLBACK		= 8		-- function(newValue) callback when value is changed
 
 B_AS_VarSettings = {
 	--			Type		Default		GUI Button			GUI Text		Value names		Value Array Range
-	["AutoScan"]		= {B_AS_T_BOOL,		true,	B_AS_Button_AutoScanToggle,		"AutoScan"							},
-	["AutoBuy"]		= {B_AS_T_BOOL,		true,	B_AS_Button_AutoBuyToggle,		"AutoBuy"							},
+	["AutoScan"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoScanToggle,		"AutoScan"							},
+	["AutoBuy"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoBuyToggle,		"AutoBuy"							},
 	["AutoSlowBuy"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"							},
 	["PageLock"]  		= {B_AS_T_BOOL,		true,	B_AS_Button_PageLockToggle,		"LastPage"							},
 	["IgnoreLowGear"]	= {B_AS_T_BOOL,		true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
@@ -66,31 +66,62 @@ B_AS_VarSettings = {
 	["RecipeMinQuality"]	= {B_AS_T_LIST,		5,	B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
 	["ScanClass"]		= {B_AS_T_LIST,		0,	B_AS_Button_ScanClass,			"Class",		B_AS_ClassNames,	0, 10		},
 	["Output"] 		= {B_AS_T_BOOL,		false,	B_AS_Button_OutputToggle,		"Debug Output"							},
-	["Log"] 		= {B_AS_T_LINES,	{},	B_AS_LogBox											},
+	["Log"] 		= {B_AS_T_LINES,	{},	B_AS_LogBox												},
 	["ShowLog"] 		= {B_AS_T_BOOL,		true,														},
+	["ShowOptions"] 	= {B_AS_T_BOOL,		true,														},
+
+	["OptionPriceQuality1"]	= {B_AS_T_TEXT,		50,		B_AS_Input_OptionPriceQuality1,									},
+	["OptionPriceQuality2"]	= {B_AS_T_TEXT,		1000,		B_AS_Input_OptionPriceQuality2,									},
+	["OptionPriceQuality3"]	= {B_AS_T_TEXT,		10000,		B_AS_Input_OptionPriceQuality3,									},
+	["OptionPriceQuality4"]	= {B_AS_T_TEXT,		110000,		B_AS_Input_OptionPriceQuality4,									},
+	["OptionPriceQuality5"]	= {B_AS_T_TEXT,		2000000,	B_AS_Input_OptionPriceQuality5,									},
+	["OptionPriceQuality6"]	= {B_AS_T_TEXT,		5000000,	B_AS_Input_OptionPriceQuality6,									},
 }
 
 -- AutoBuy and SlowBuy are mutually exclusive
 -- Callback: AutoBuy turns off SlowBuy
-B_AS_VarSettings["AutoBuy"][B_AS_S_CALLBACK] = function(value)
+B_AS_VarSettings["AutoBuy"][B_AS_S_CALLBACK] = function(setting, value)
 	if (value == true) then
 		B_AS_SetVar("AutoSlowBuy", false)
 	end
 end
 -- Callback: SlowBuy turns off AutoBuy
-B_AS_VarSettings["AutoSlowBuy"][B_AS_S_CALLBACK] = function(value)
+B_AS_VarSettings["AutoSlowBuy"][B_AS_S_CALLBACK] = function(setting, value)
 	if (value == true) then
 		B_AS_SetVar("AutoBuy", false)
 	end
 end
 -- Callback: Show Log
-B_AS_VarSettings["ShowLog"][B_AS_S_CALLBACK] = function(value)
+B_AS_VarSettings["ShowLog"][B_AS_S_CALLBACK] = function(setting, value)
 	if value then
 		B_AS_LogBoxContainer:Show()
 	else
 		B_AS_LogBoxContainer:Hide()
 	end
 end
+-- Callback: Show Options
+B_AS_VarSettings["ShowOptions"][B_AS_S_CALLBACK] = function(setting, value)
+	if value then
+		B_AS_OptionsContainer:Show()
+	else
+		B_AS_OptionsContainer:Hide()
+	end
+end
+-- Callback: Options: Setting price quality changes money text
+B_AS_OptionPriceQuality_Callback = function(setting, value)
+	local numberValue = tonumber(value)
+	local text = "Error!"
+	if (numberValue ~= nil) then
+		text = B_AS_MoneyToText(numberValue)
+	end
+	getglobal("B_AS_Text_" .. setting):SetText(text)
+end
+B_AS_VarSettings["OptionPriceQuality1"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
+B_AS_VarSettings["OptionPriceQuality2"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
+B_AS_VarSettings["OptionPriceQuality3"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
+B_AS_VarSettings["OptionPriceQuality4"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
+B_AS_VarSettings["OptionPriceQuality5"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
+B_AS_VarSettings["OptionPriceQuality6"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
 
 -------------------------------------------------------------------------------
 
@@ -274,6 +305,8 @@ end
 ]]
 function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 
+	local doNotIgnoreLowGear = false	-- Ignore the min. gear level check if true
+
 	-- Do not buy your own auctions
 	if (owner == UnitName("player")) then
 		return false
@@ -285,19 +318,6 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 	end
 
 	--[[
-		Ignore items with required lvl between 1 and LowGearLevel
-		if the option IgnoreLowGear is active
-	]]
-	if (B_AS_GS["IgnoreLowGear"] == true) then
-		local minLevel = tonumber(B_AS_GS["LowGearLevel"])
-		if (minLevel ~= nil) then
-			if (level > 1 and level < minLevel) then
-				return false
-			end
-		end
-	end
-
-	--[[
 		Check if this item is in the Specials list and
 		save the item's custom quality level in priceQuality
 	]]
@@ -305,6 +325,7 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 	for specialName, specialQuality in B_AS_Specials do
 		if string.find(name, specialName, 1, true) ~= nil then
 			priceQuality = specialQuality
+			doNotIgnoreLowGear = true
 			break
 		end
 	end
@@ -314,6 +335,7 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 	]]
 	if B_AS_SpecialsExact[name] then
 		priceQuality = B_AS_SpecialsExact[name]
+		doNotIgnoreLowGear = true
 	end
 
 	--[[
@@ -325,6 +347,7 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 		local minStack		= B_AS_SpecialsExactConditional[name][2]
 		if count >= minStack then
 			priceQuality = specialQuality
+			doNotIgnoreLowGear = true
 		end
 	end
 
@@ -351,8 +374,21 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 	end
 
 	-- Do not buy the item if it's too expensive for its quality
-	if (buyPrice > B_AS_Price[priceQuality]) then
+	if (buyPrice > tonumber(B_AS_GS["OptionPriceQuality" .. priceQuality])) then
 		return false
+	end
+
+	--[[
+		Ignore items with required lvl between 1 and LowGearLevel
+		if the option IgnoreLowGear is active
+	]]
+	if (doNotIgnoreLowGear == false and B_AS_GS["IgnoreLowGear"] == true) then
+		local minLevel = tonumber(B_AS_GS["LowGearLevel"])
+		if (minLevel ~= nil) then
+			if (level > 1 and level < minLevel) then
+				return false
+			end
+		end
 	end
 
 	-- Do not buy auctions that cost more than you have
@@ -424,7 +460,7 @@ function B_AS_SetVar(var, value)
 	end
 
 	if (callback ~= nil) then
-		callback(value)
+		callback(var, value)
 	end
 
 end
@@ -448,6 +484,21 @@ function B_AS_IncreaseVar(var)
 	B_AS_SetVar(var, newValue)
 end
 
+function B_AS_InitializeSettings()
+	-- B_AS_GS (global saved variable) is nil on first addon use
+	if (B_AS_GS == nil) then
+		-- Fill global settings with default values
+		B_AS_GS = {}
+		for var, settings in B_AS_VarSettings do
+		B_AS_GS[var] = settings[B_AS_S_DEFAULT]
+		end
+	end
+
+	for var, value in B_AS_GS do
+		B_AS_SetVar(var, value)
+	end
+end
+
 
 -------------------------------------------------------------------------------
 
@@ -463,18 +514,7 @@ function B_AS_OnEvent()
 	if (event == "ADDON_LOADED") then
 		if (string.lower(arg1) == "auctionsniper") then
 
-			-- B_AS_GS (global saved variable) is nil on first addon use
-			if (B_AS_GS == nil) then
-				-- Fill global settings with default values
-				B_AS_GS = {}
-				for var, settings in B_AS_VarSettings do
-					B_AS_GS[var] = settings[B_AS_S_DEFAULT]
-				end
-			end
-
-			for var, value in B_AS_GS do
-				B_AS_SetVar(var, value)
-			end
+			B_AS_InitializeSettings()
 
 			DEFAULT_CHAT_FRAME:AddMessage("AuctionSniper " .. B_AS_VERSION .. " loaded.", 0.37, 1, 0)
 		end

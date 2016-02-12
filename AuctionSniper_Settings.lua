@@ -24,20 +24,6 @@ Copper Conversion List
 
 
 --[[
-	The maximum amount of money that will be paid for each item quality.
-]]
-B_AS_Price = {
-	[0] = 0,		-- Poor		-> Nothing
-	[1] = 50,		-- Common	-> 50 Copper
-	[2] = 1000,		-- Uncommon	-> 10 Silver
-	[3] = 10000,		-- Rare		-> 1 Gold
-	[4] = 110000,		-- Epic		-> 11 Gold
-	[5] = 2000000,		-- Legend	-> 200 Gold
-	[6] = 5000000		-- Artifact	-> 500 Gold
-}
-
-
---[[
 	Player Whitelist.
 	Will not buy any items from these players.
 ]]

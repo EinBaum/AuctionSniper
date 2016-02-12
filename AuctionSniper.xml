@@ -2,6 +2,19 @@
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
 	<Script file="AuctionSniper.lua"/>
 
+	<Frame name="B_AS_ContainerTemplate" virtual="true">
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+	</Frame>
 	<Frame name="B_AS_Frame" toplevel="true" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Size>
@@ -29,6 +42,9 @@
 		</Backdrop>
 
 		<Layers>
+			<Layer level="BACKGROUND">
+			</Layer>
+
 			<Layer level="ARTWORK">
 				<Texture name="B_AS_Header" file="Interface\DialogFrame\UI-DialogBox-Header">
 					<Size>
@@ -53,14 +69,269 @@
 				</FontString>
 			</Layer>
 
-			<Layer level="BACKGROUND">
-			</Layer>
-
 			<Layer level="OVERLAY">
 			</Layer>
 		</Layers>
 		<Frames>
-			<Frame name="B_AS_LogBoxContainer">
+			<Frame name="B_AS_OptionsContainer" inherits="B_AS_ContainerTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parent">
+					</Anchor>
+					<Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="UIParent">
+					</Anchor>
+				</Anchors>
+				<Size>
+					<AbsDimension y="200" />
+				</Size>
+
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString inherits="GameFontNormal" text="Max. price for each quality:">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_OptionsContainer">
+									<Offset>
+										<AbsDimension x="16" y="-16"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+
+				<Frames>
+					<EditBox name="B_AS_Input_OptionPriceQuality1" autoFocus="false" letters="10" inherits="InputBoxTemplate">
+						<Size x="64" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
+								<Offset>
+									<AbsDimension x="96" y="-32"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString inherits="GameFontHighlightSmall" text="Common:">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent">
+											<Offset>
+												<AbsDimension x="-10" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+								<FontString name="B_AS_Text_OptionPriceQuality1" inherits="GameFontHighlightSmall" text="">
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent">
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnTextChanged>
+								B_AS_SetVar("OptionPriceQuality1", this:GetText())
+							</OnTextChanged>
+						</Scripts>
+					</EditBox>
+					<EditBox name="B_AS_Input_OptionPriceQuality2" autoFocus="false" letters="10" inherits="InputBoxTemplate">
+						<Size x="64" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_Input_OptionPriceQuality1">
+								<Offset>
+									<AbsDimension x="0" y="-16"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString inherits="GameFontHighlightSmall" text="Uncommon:">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent">
+											<Offset>
+												<AbsDimension x="-10" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+								<FontString name="B_AS_Text_OptionPriceQuality2" inherits="GameFontHighlightSmall" text="">
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent">
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnTextChanged>
+								B_AS_SetVar("OptionPriceQuality2", this:GetText())
+							</OnTextChanged>
+						</Scripts>
+					</EditBox>
+					<EditBox name="B_AS_Input_OptionPriceQuality3" autoFocus="false" letters="10" inherits="InputBoxTemplate">
+						<Size x="64" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_Input_OptionPriceQuality2">
+								<Offset>
+									<AbsDimension x="0" y="-16"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString inherits="GameFontHighlightSmall" text="Rare:">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent">
+											<Offset>
+												<AbsDimension x="-10" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+								<FontString name="B_AS_Text_OptionPriceQuality3" inherits="GameFontHighlightSmall" text="">
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent">
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnTextChanged>
+								B_AS_SetVar("OptionPriceQuality3", this:GetText())
+							</OnTextChanged>
+						</Scripts>
+					</EditBox>
+					<EditBox name="B_AS_Input_OptionPriceQuality4" autoFocus="false" letters="10" inherits="InputBoxTemplate">
+						<Size x="64" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_Input_OptionPriceQuality3">
+								<Offset>
+									<AbsDimension x="0" y="-16"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString inherits="GameFontHighlightSmall" text="Epic:">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent">
+											<Offset>
+												<AbsDimension x="-10" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+								<FontString name="B_AS_Text_OptionPriceQuality4" inherits="GameFontHighlightSmall" text="">
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent">
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnTextChanged>
+								B_AS_SetVar("OptionPriceQuality4", this:GetText())
+							</OnTextChanged>
+						</Scripts>
+					</EditBox>
+					<EditBox name="B_AS_Input_OptionPriceQuality5" autoFocus="false" letters="10" inherits="InputBoxTemplate">
+						<Size x="64" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_Input_OptionPriceQuality4">
+								<Offset>
+									<AbsDimension x="0" y="-16"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString inherits="GameFontHighlightSmall" text="Legend:">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent">
+											<Offset>
+												<AbsDimension x="-10" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+								<FontString name="B_AS_Text_OptionPriceQuality5" inherits="GameFontHighlightSmall" text="">
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent">
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnTextChanged>
+								B_AS_SetVar("OptionPriceQuality5", this:GetText())
+							</OnTextChanged>
+						</Scripts>
+					</EditBox>
+					<EditBox name="B_AS_Input_OptionPriceQuality6" autoFocus="false" letters="10" inherits="InputBoxTemplate">
+						<Size x="64" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_Input_OptionPriceQuality5">
+								<Offset>
+									<AbsDimension x="0" y="-16"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString inherits="GameFontHighlightSmall" text="Artifact:">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent">
+											<Offset>
+												<AbsDimension x="-10" y="0"/>
+											</Offset>
+										</Anchor>
+									</Anchors>
+								</FontString>
+								<FontString name="B_AS_Text_OptionPriceQuality6" inherits="GameFontHighlightSmall" text="">
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent">
+										</Anchor>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnTextChanged>
+								B_AS_SetVar("OptionPriceQuality6", this:GetText())
+							</OnTextChanged>
+						</Scripts>
+					</EditBox>
+
+					<Button name="B_AS_Button_OptionReset" inherits="GameMenuButtonTemplate" text="Reset All Settings">
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="16" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								StaticPopupDialogs["B_AS_OptionReset"] = {
+									text = "Reset all settings?",
+									button1 = TEXT(YES),
+									button2 = TEXT(NO),
+									OnAccept = function()
+										B_AS_GS = nil
+										B_AS_InitializeSettings()
+									end,
+									timeout = 0,
+									hideOnEscape = 0,
+								}
+								StaticPopup_Show("B_AS_OptionReset")
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame name="B_AS_LogBoxContainer" inherits="B_AS_ContainerTemplate">
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" relativeTo="$parent">
 					</Anchor>
@@ -72,37 +343,25 @@
 					<AbsDimension y="200" />
 				</Size>
 
-				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-					<BackgroundInsets>
-						<AbsInset left="11" right="12" top="12" bottom="11"/>
-					</BackgroundInsets>
-					<TileSize>
-						<AbsValue val="32"/>
-					</TileSize>
-					<EdgeSize>
-						<AbsValue val="32"/>
-					</EdgeSize>
-				</Backdrop>
-
 				<Frames>
 					<ScrollingMessageFrame name="B_AS_LogBox" toplevel="false" maxLines="1024" displayDuration="90000000">
 						<Anchors>
-							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="B_AS_LogBoxContainer">
+							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$parent">
 								<Offset>
 									<AbsDimension x="-20" y="-20"/>
 								</Offset>
 							</Anchor>
-							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="B_AS_LogBoxContainer">
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
 								<Offset>
 									<AbsDimension x="20" y="-20"/>
 								</Offset>
 							</Anchor>
-							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="B_AS_LogBoxContainer">
+							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent">
 								<Offset>
 									<AbsDimension x="20" y="20"/>
 								</Offset>
 							</Anchor>
-							<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_LogBoxContainer">
+							<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="$parent">
 								<Offset>
 									<AbsDimension x="-20" y="20"/>
 								</Offset>
@@ -120,6 +379,9 @@
 					<Button name="B_AS_Button_LogClear" inherits="GameMenuButtonTemplate" text="Clear Log">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+								<Offset>
+									<AbsDimension x="16" y="0"/>
+								</Offset>
 							</Anchor>
 						</Anchors>
 						<Scripts>
@@ -142,6 +404,21 @@
 				<Scripts>
 					<OnClick>
 						B_AS_ToggleVar("ShowLog")
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Button name="B_AS_Button_OptionsToggle" inherits="GameMenuButtonTemplate" text="O|nP|nT|nI|nO|nN|nS">
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+					</Anchor>
+				</Anchors>
+				<Size>
+					<AbsDimension x="20" y="130"/>
+				</Size>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("ShowOptions")
 					</OnClick>
 				</Scripts>
 			</Button>
