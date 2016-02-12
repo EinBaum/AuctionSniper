@@ -42,7 +42,8 @@ B_AS_SLOWBUY_RANDOM = 0.5
 B_AS_T_BOOL		= 1		-- Button is an ON/OFF toggle button
 B_AS_T_LIST		= 2		-- Button switches between multiple values
 B_AS_T_TEXT		= 3		-- EditBox with just one line
-B_AS_T_LINES		= 4		-- EditBox with many lines
+B_AS_T_NUMBER		= 4		-- EditBox with one number
+B_AS_T_LINES		= 5		-- EditBox with many lines
 
 B_AS_S_TYPE		= 1		-- Setting type: BOOL/LIST
 B_AS_S_DEFAULT		= 2		-- Default value (set on first time addon use)
@@ -60,7 +61,7 @@ B_AS_VarSettings = {
 	["AutoSlowBuy"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"							},
 	["PageLock"]  		= {B_AS_T_BOOL,		true,	B_AS_Button_PageLockToggle,		"LastPage"							},
 	["IgnoreLowGear"]	= {B_AS_T_BOOL,		true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
-	["LowGearLevel"]	= {B_AS_T_TEXT,		50,	B_AS_Input_IgnoreLowGearLevel,										},
+	["LowGearLevel"]	= {B_AS_T_NUMBER,	50,	B_AS_Input_IgnoreLowGearLevel,										},
 	["ScanMinQuality"]	= {B_AS_T_LIST,		1,	B_AS_Button_ScanMinQuality,		"Scan Q",		B_AS_QualityList,	1, 5		},
 	["BuyMinQuality"]	= {B_AS_T_LIST,		4,	B_AS_Button_BuyMinQuality,		"Buy Q",		B_AS_QualityList,	1, 5		},
 	["RecipeMinQuality"]	= {B_AS_T_LIST,		5,	B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
@@ -70,12 +71,12 @@ B_AS_VarSettings = {
 	["ShowLog"] 		= {B_AS_T_BOOL,		true,														},
 	["ShowOptions"] 	= {B_AS_T_BOOL,		true,														},
 
-	["OptionPriceQuality1"]	= {B_AS_T_TEXT,		50,		B_AS_Input_OptionPriceQuality1,									},
-	["OptionPriceQuality2"]	= {B_AS_T_TEXT,		1000,		B_AS_Input_OptionPriceQuality2,									},
-	["OptionPriceQuality3"]	= {B_AS_T_TEXT,		10000,		B_AS_Input_OptionPriceQuality3,									},
-	["OptionPriceQuality4"]	= {B_AS_T_TEXT,		110000,		B_AS_Input_OptionPriceQuality4,									},
-	["OptionPriceQuality5"]	= {B_AS_T_TEXT,		2000000,	B_AS_Input_OptionPriceQuality5,									},
-	["OptionPriceQuality6"]	= {B_AS_T_TEXT,		5000000,	B_AS_Input_OptionPriceQuality6,									},
+	["OptionPriceQuality1"]	= {B_AS_T_NUMBER,	50,		B_AS_Input_OptionPriceQuality1,									},
+	["OptionPriceQuality2"]	= {B_AS_T_NUMBER,	1000,		B_AS_Input_OptionPriceQuality2,									},
+	["OptionPriceQuality3"]	= {B_AS_T_NUMBER,	10000,		B_AS_Input_OptionPriceQuality3,									},
+	["OptionPriceQuality4"]	= {B_AS_T_NUMBER,	110000,		B_AS_Input_OptionPriceQuality4,									},
+	["OptionPriceQuality5"]	= {B_AS_T_NUMBER,	2000000,	B_AS_Input_OptionPriceQuality5,									},
+	["OptionPriceQuality6"]	= {B_AS_T_NUMBER,	5000000,	B_AS_Input_OptionPriceQuality6,									},
 }
 
 -- AutoBuy and SlowBuy are mutually exclusive
@@ -110,11 +111,9 @@ end
 -- Callback: Options: Setting price quality changes money text
 B_AS_OptionPriceQuality_Callback = function(setting, value)
 	local numberValue = tonumber(value)
-	local text = "Error!"
 	if (numberValue ~= nil) then
-		text = B_AS_MoneyToText(numberValue)
+		getglobal("B_AS_Text_" .. setting):SetText(B_AS_MoneyToText(numberValue))
 	end
-	getglobal("B_AS_Text_" .. setting):SetText(text)
 end
 B_AS_VarSettings["OptionPriceQuality1"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
 B_AS_VarSettings["OptionPriceQuality2"][B_AS_S_CALLBACK] = B_AS_OptionPriceQuality_Callback
@@ -407,10 +406,8 @@ end
 
 
 function B_AS_SetVar(var, value)
-	B_AS_GS[var] = value
 
 	local settings = B_AS_VarSettings[var]
-
 	if not settings then
 		return
 	end
@@ -420,6 +417,8 @@ function B_AS_SetVar(var, value)
 	local text	= settings[B_AS_S_TEXT]
 	local values	= settings[B_AS_S_VALUES]
 	local callback	= settings[B_AS_S_CALLBACK]
+
+	local doSetValue = true
 
 	if (gui ~= nil) then
 		local valueText = nil
@@ -438,6 +437,12 @@ function B_AS_SetVar(var, value)
 			end
 		elseif (type == B_AS_T_TEXT) then
 			gui:SetText(value)
+		elseif (type == B_AS_T_NUMBER) then
+			if (tonumber(value) ~= nil) then
+				gui:SetText(value)
+			else
+				doSetValue = false
+			end
 		elseif (type == B_AS_T_LINES) then
 			gui:Clear()
 			for _,v in value do
@@ -457,6 +462,10 @@ function B_AS_SetVar(var, value)
 		end
 	else
 		B_AS_Print("SET "..var)
+	end
+
+	if (doSetValue == true) then
+		B_AS_GS[var] = value
 	end
 
 	if (callback ~= nil) then
