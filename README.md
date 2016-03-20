@@ -6,6 +6,7 @@
 - Auto Buyout
 - Slow Auto Buyout (Anti-Bot)
 - Scan last page only
+- Scan a fixed page only
 - Seller whitelist (won't buy from them)
 - Manual Scan + Buyout buttons
 - Log (Item + Seller + Price + Time)
@@ -35,7 +36,7 @@ Same as AutoBuy except that it won't buy more than 1 item every few seconds. Use
 Scan the last page only because that's where new auctions appear. Will scan all pages if this is disabled.
 
 **IgnoreLowGear**
-Won't buy gear under level 50 (by default) if this is enabled.
+Won't buy gear under level 50 (by default) if this is enabled. Notice: Items that are in your special quality lists are not ignored!
 
 **Min. Gear Level**
 Text input where you can set the minimum gear level. Only used if IgnoreLowGear is enabled.

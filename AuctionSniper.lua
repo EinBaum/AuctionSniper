@@ -19,10 +19,6 @@ B_AS_ClassNames = {
 	"Recipe", "Reagent", "Miscellaneous"
 }
 
-B_AS_CharNumbers = {
-	1, 2, 3, 4, 5
-}
-
 -- Minimum time between 2 auction house scan queries
 B_AS_SCAN_BASE = 5.0
 
@@ -38,12 +34,18 @@ B_AS_SLOWBUY_RANDOM = 0.5
 
 -------------------------------------------------------------------------------
 
+B_AS_I_NAME		= 1
+B_AS_I_PARTIAL		= 2
+B_AS_I_QUALITY		= 3
+B_AS_I_STACK		= 4
+
 
 B_AS_T_BOOL		= 1		-- Button is an ON/OFF toggle button
 B_AS_T_LIST		= 2		-- Button switches between multiple values
 B_AS_T_TEXT		= 3		-- EditBox with just one line
 B_AS_T_NUMBER		= 4		-- EditBox with one number
 B_AS_T_LINES		= 5		-- EditBox with many lines
+B_AS_T_MISC		= 6		-- Something else
 
 B_AS_S_TYPE		= 1		-- Setting type: BOOL/LIST
 B_AS_S_DEFAULT		= 2		-- Default value (set on first time addon use)
@@ -60,6 +62,8 @@ B_AS_VarSettings = {
 	["AutoBuy"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoBuyToggle,		"AutoBuy"							},
 	["AutoSlowBuy"]		= {B_AS_T_BOOL,		false,	B_AS_Button_AutoSlowBuyToggle,		"SlowBuy"							},
 	["PageLock"]  		= {B_AS_T_BOOL,		true,	B_AS_Button_PageLockToggle,		"LastPage"							},
+	["PageFixed"]  		= {B_AS_T_BOOL,		false,	B_AS_Button_PageFixedToggle,		"FixedPage"							},
+	["WhichPage"]  		= {B_AS_T_NUMBER,	0,	B_AS_Input_WhichPage,											},
 	["IgnoreLowGear"]	= {B_AS_T_BOOL,		true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
 	["LowGearLevel"]	= {B_AS_T_NUMBER,	50,	B_AS_Input_IgnoreLowGearLevel,										},
 	["ScanMinQuality"]	= {B_AS_T_LIST,		1,	B_AS_Button_ScanMinQuality,		"Scan Q",		B_AS_QualityList,	1, 5		},
@@ -70,6 +74,7 @@ B_AS_VarSettings = {
 	["Log"] 		= {B_AS_T_LINES,	{},	B_AS_LogBox												},
 	["ShowLog"] 		= {B_AS_T_BOOL,		true,														},
 	["ShowOptions"] 	= {B_AS_T_BOOL,		true,														},
+	["ShowItems"] 		= {B_AS_T_BOOL,		false,														},
 
 	["OptionPriceQuality1"]	= {B_AS_T_NUMBER,	50,		B_AS_Input_OptionPriceQuality1,									},
 	["OptionPriceQuality2"]	= {B_AS_T_NUMBER,	1000,		B_AS_Input_OptionPriceQuality2,									},
@@ -77,6 +82,8 @@ B_AS_VarSettings = {
 	["OptionPriceQuality4"]	= {B_AS_T_NUMBER,	110000,		B_AS_Input_OptionPriceQuality4,									},
 	["OptionPriceQuality5"]	= {B_AS_T_NUMBER,	2000000,	B_AS_Input_OptionPriceQuality5,									},
 	["OptionPriceQuality6"]	= {B_AS_T_NUMBER,	5000000,	B_AS_Input_OptionPriceQuality6,									},
+
+	["Items"] 		= {B_AS_T_MISC,		{},														},
 }
 
 -- AutoBuy and SlowBuy are mutually exclusive
@@ -90,6 +97,19 @@ end
 B_AS_VarSettings["AutoSlowBuy"][B_AS_S_CALLBACK] = function(setting, value)
 	if (value == true) then
 		B_AS_SetVar("AutoBuy", false)
+	end
+end
+-- PageLock and PageFixed are mutually exclusive
+-- Callback: PageLock
+B_AS_VarSettings["PageLock"][B_AS_S_CALLBACK] = function(setting, value)
+	if (value == true) then
+		B_AS_SetVar("PageFixed", false)
+	end
+end
+-- Callback: PageFixed
+B_AS_VarSettings["PageFixed"][B_AS_S_CALLBACK] = function(setting, value)
+	if (value == true) then
+		B_AS_SetVar("PageLock", false)
 	end
 end
 -- Callback: Show Log
@@ -106,6 +126,14 @@ B_AS_VarSettings["ShowOptions"][B_AS_S_CALLBACK] = function(setting, value)
 		B_AS_OptionsContainer:Show()
 	else
 		B_AS_OptionsContainer:Hide()
+	end
+end
+-- Callback: Show Items
+B_AS_VarSettings["ShowItems"][B_AS_S_CALLBACK] = function(setting, value)
+	if value then
+		B_AS_ItemsContainer:Show()
+	else
+		B_AS_ItemsContainer:Hide()
 	end
 end
 -- Callback: Options: Setting price quality changes money text
@@ -168,6 +196,26 @@ function B_AS_MoneyToText(money)
 		o = o .. "|cffff9020" .. copper .. "c|r"
 	end
 	return o
+end
+
+--[[
+	Prints a table recursively
+	http://stackoverflow.com/a/27028488
+]]
+function B_AS_PrintTable(o)
+	if type(o) == 'table' then
+		local s = '{'
+		for k,v in pairs(o) do
+			local kk = k
+			if type(kk) ~= 'number' then kk = '"'..kk..'"' end
+			s = s .. '['..kk..']=' .. B_AS_PrintTable(v) .. ','
+		end
+		return s .. '}'
+	elseif type(o) == 'string' then
+		return '"' .. o .. '"'
+	else
+		return tostring(o)
+	end
 end
 
 
@@ -269,9 +317,15 @@ function B_AS_Scan()
 	end
 
 	-- If PageLock then set the current page to the last page
+	-- If PageFixed then use the page that the user specified
 	if (B_AS_GS["PageLock"]) then
 		B_AS_Page = math.floor(B_AS_TotalAuctions / 50)
+	elseif (B_AS_GS["PageFixed"]) then
+		B_AS_Page = B_AS_GS["WhichPage"]
 	end
+
+	-- GUI fix only: Make the AH interface show the right page number
+	AuctionFrameBrowse.page = B_AS_Page
 
 	B_AS_Print("Querying Page "..B_AS_Page..". Min. Quality: "..B_AS_GS["ScanMinQuality"])
 
@@ -372,6 +426,11 @@ function B_AS_CheckItem(name, count, quality, level, buyPrice, owner)
 		return false
 	end
 
+	-- Do not buy gray items
+	if (priceQuality == 0) then
+		return false
+	end
+
 	-- Do not buy the item if it's too expensive for its quality
 	if (buyPrice > tonumber(B_AS_GS["OptionPriceQuality" .. priceQuality])) then
 		return false
@@ -438,7 +497,8 @@ function B_AS_SetVar(var, value)
 		elseif (type == B_AS_T_TEXT) then
 			gui:SetText(value)
 		elseif (type == B_AS_T_NUMBER) then
-			if (tonumber(value) ~= nil) then
+			value = tonumber(value)
+			if (value~= nil) then
 				gui:SetText(value)
 			else
 				doSetValue = false
@@ -499,7 +559,7 @@ function B_AS_InitializeSettings()
 		-- Fill global settings with default values
 		B_AS_GS = {}
 		for var, settings in B_AS_VarSettings do
-		B_AS_GS[var] = settings[B_AS_S_DEFAULT]
+			B_AS_GS[var] = settings[B_AS_S_DEFAULT]
 		end
 	end
 
@@ -508,6 +568,61 @@ function B_AS_InitializeSettings()
 	end
 end
 
+function B_AS_InitializeItems()
+	local numItems = 22
+
+	for i = 1, numItems do
+		local settingsItem = B_AS_GS["Items"][i]
+
+		if not settingsItem then
+			B_AS_GS["Items"][i] = {}
+			settingsItem = B_AS_GS["Items"][i]
+			settingsItem[B_AS_I_NAME] = ""
+			settingsItem[B_AS_I_PARTIAL] = false
+			settingsItem[B_AS_I_QUALITY] = 1
+			settingsItem[B_AS_I_STACK] = 1
+		end
+
+		local frameItem = CreateFrame("frame", "B_AS_Item" .. i, B_AS_ItemsContainer, "B_AS_ItemTemplate")
+		local frameName, framePartial, frameQuality, frameStack = frameItem:GetChildren()
+
+		frameName:SetText(settingsItem[B_AS_I_NAME])
+		frameName:SetScript("OnTextChanged", function()
+			settingsItem[B_AS_I_NAME] = frameName:GetText()
+		end)
+
+		framePartial:SetChecked(settingsItem[B_AS_I_PARTIAL])
+		framePartial:SetScript("OnClick", function()
+			settingsItem[B_AS_I_PARTIAL] = framePartial:GetChecked()
+		end)
+
+		UIDropDownMenu_Initialize(frameQuality, function()
+			local info = {}
+			for i = 1, table.getn(B_AS_QualityList) do
+				info.text = B_AS_QualityList[i]
+				info.value = i
+				info.func = function()
+					UIDropDownMenu_SetSelectedID(frameQuality, this:GetID())
+					settingsItem[B_AS_I_QUALITY] = this:GetID()
+				end
+				info.checked = nil
+				UIDropDownMenu_AddButton(info, 1)
+			end
+		end)
+		UIDropDownMenu_SetSelectedID(frameQuality, settingsItem[B_AS_I_QUALITY])
+
+		frameStack:SetText(settingsItem[B_AS_I_STACK])
+		frameStack:SetScript("OnTextChanged", function()
+			local number = tonumber(frameStack:GetText())
+			if (number ~= nil) then
+				settingsItem[B_AS_I_STACK] = frameStack:GetText()
+			end
+		end)
+
+		frameItem:SetPoint("TOPLEFT", B_AS_ItemsContainer, "TOPLEFT", 20, -20 + i * -16)
+		frameItem:Show()
+	end
+end
 
 -------------------------------------------------------------------------------
 
@@ -522,8 +637,9 @@ end
 function B_AS_OnEvent()
 	if (event == "ADDON_LOADED") then
 		if (string.lower(arg1) == "auctionsniper") then
-
+			-- Initialize global variable if it's nil
 			B_AS_InitializeSettings()
+			B_AS_InitializeItems()
 
 			DEFAULT_CHAT_FRAME:AddMessage("AuctionSniper " .. B_AS_VERSION .. " loaded.", 0.37, 1, 0)
 		end
