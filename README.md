@@ -1,5 +1,9 @@
 #AuctionSniper#
 
+###Installation###
+- Make sure the directory name of the AddOn is exactly "AuctionSniper"
+- Open the file 'AuctionSniper_Settings.lua' to modify item exceptions
+
 ###Features###
 
 - Auto Scan
