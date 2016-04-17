@@ -340,9 +340,6 @@ function B_AS_Scan()
 	if (B_AS_Page * 50 > B_AS_TotalAuctions) then
 		B_AS_Page = 0
 	end
-
-	-- Set the "last scan time" to the current time
-	B_AS_LastTime = GetTime()
 end
 
 --[[
@@ -672,7 +669,6 @@ function B_AS_SlowBuyTick(currTime)
 end
 function B_AS_AutoScanTick(currTime)
 
-	--if (currTime - B_AS_LastTime >= B_AS_WaitTime) then
 	if (CanSendAuctionQuery()) then
 		B_AS_Scan()
 	end

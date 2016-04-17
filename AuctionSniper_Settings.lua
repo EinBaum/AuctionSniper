@@ -100,14 +100,17 @@ B_AS_SpecialsExact = {
 	["Onyxia Scale Cloak"]					= 4,	--
 	["Devilsaur Gauntlets"]					= 4,	-- 110g
 	["Devilsaur Leggings"]					= 4,	-- 210g
-	["The Greatest Race of Hunters"]			= 4,	-- 135g
+
+	["Elementals Deck"]					= 5,	-- 300g - 400g
 
 	["Lionheart Helm"]					= 5,	-- 500g+
 	["Plans: Lionheart Helm"]				= 5,	-- 700g+
 	["Corehound Belt"]					= 5,	-- 390g
-	["Elementals Deck"]					= 5,	-- 300g - 400g
 	["Nightfall"]						= 5,	--
+	["Flarecore Robe"]					= 5,	-- 300g - 400g
+	["Flarecore Leggings"]					= 5,	-- 300g - 450g
 
+	["Underworld Band"]					= 5	-- 300g
 	["Freezing Band"]					= 5,	-- 380g
 	["Sash of Mercy"]					= 5,	-- 250g
 	["Foror's Compendium of Dragon Slaying"]		= 5,	-- 400g - 800g
@@ -131,18 +134,20 @@ B_AS_SpecialsExact = {
 	Format: {Quality,	MinimumStackOfItems}
 ]]
 B_AS_SpecialsExactConditional = {
-	["Plaguebloom"]						= {4,	20},		-- 2g
+	["Plaguebloom"]						= {4,	20},		-- 2g * 20	= 40g
+	["Mooncloth"]						= {4,	5},		-- 11g * 5	= 55g
 
-	["Devilsaur Leather"]					= {4,	5},		-- 11g
-	["Core Leather"]					= {4,	8},		-- 6g
-	["Cured Rugged Hide"]					= {4,	8},		-- 6g
+	["Devilsaur Leather"]					= {4,	5},		-- 11g * 5	= 55g
+	["Core Leather"]					= {4,	8},		-- 6g * 8	= 48g
+	["Cured Rugged Hide"]					= {4,	8},		-- 6g * 8	= 48g
+	["Refined Deeprock Salt"]				= {4,	8}		-- 6g * 8	= 48g
 
 	["Large Brilliant Shard"]				= {4,	5},		-- 5g * 10	= 50g
 	["Nexus Crystal"]					= {4,	5},		-- 8g * 5	= 40g
 
-	["Black Lotus"]						= {4,	2},		-- 60g
-	["Arcane Crystal"]					= {4,	3},		-- 24g
-	["Arcanite Bar"]					= {4,	2},		-- 30g
-	["Lava Core"]						= {4,	3},		-- 20g
-	["Fiery Core"]						= {4,	3},		-- 20g
+	["Black Lotus"]						= {4,	2},		-- 60g * 2	= 120g
+	["Arcane Crystal"]					= {4,	3},		-- 24g * 3	= 72g
+	["Arcanite Bar"]					= {4,	2},		-- 30g * 2	= 60g
+	["Lava Core"]						= {4,	3},		-- 20g * 3	= 60g
+	["Fiery Core"]						= {4,	3},		-- 20g * 3	= 60g
 }
