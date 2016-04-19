@@ -93,13 +93,17 @@ B_AS_SpecialsExact = {
 	["Flask of Supreme Power"]				= 4,	-- 100g
 	["Flask of the Titans"]					= 4,	-- 125g
 
-	["Orb of Deception"]					= 4,	-- 35g - 80g
-	["Biznicks 247x128 Accurascope"]			= 4,	-- 200g+
-	["Medallion of Grand Marshal Morris"]			= 4,	-- 135g
 	["Cassandra's Grace"]					= 4,	-- 130g
+	["Pristine Hide of the Beast"]				= 4,	-- 125g
+	["Orb of Deception"]					= 4,	-- 35g - 80g
+	["Medallion of Grand Marshal Morris"]			= 4,	-- 135g
+
+	["Biznicks 247x128 Accurascope"]			= 4,	-- 200g+
 	["Onyxia Scale Cloak"]					= 4,	--
 	["Devilsaur Gauntlets"]					= 4,	-- 110g
 	["Devilsaur Leggings"]					= 4,	-- 210g
+	["Bloodvine Boots"]					= 4,	-- 150g
+	["Bloodvine Vest"]					= 4,	-- 170g
 
 	["Elementals Deck"]					= 5,	-- 300g - 400g
 
@@ -107,6 +111,7 @@ B_AS_SpecialsExact = {
 	["Plans: Lionheart Helm"]				= 5,	-- 700g+
 	["Corehound Belt"]					= 5,	-- 390g
 	["Nightfall"]						= 5,	--
+	["Sageblade"]						= 5,	-- 400g
 	["Flarecore Robe"]					= 5,	-- 300g - 400g
 	["Flarecore Leggings"]					= 5,	-- 300g - 450g
 
@@ -114,7 +119,6 @@ B_AS_SpecialsExact = {
 	["Freezing Band"]					= 5,	-- 380g
 	["Sash of Mercy"]					= 5,	-- 250g
 	["Foror's Compendium of Dragon Slaying"]		= 5,	-- 400g - 800g
-	["Pristine Hide of the Beast"]				= 5,	-- 440g - 600g
 
 	["Recipe: Flask of Distilled Wisdom"]			= 6,	--
 	["Recipe: Flask of Supreme Power"]			= 6,	-- 750g
@@ -138,6 +142,7 @@ B_AS_SpecialsExactConditional = {
 
 	["Plaguebloom"]						= {4,	20},		-- 2g * 20	= 40g
 	["Mooncloth"]						= {4,	5},		-- 11g * 5	= 55g
+	["Bloodvine"]						= {4,	5},		-- 12g * 5	= 60g
 
 	["Devilsaur Leather"]					= {4,	5},		-- 11g * 5	= 55g
 	["Core Leather"]					= {4,	8},		-- 6g * 8	= 48g

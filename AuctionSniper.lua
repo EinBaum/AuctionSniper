@@ -31,6 +31,9 @@ B_AS_SLOWBUY_BASE = 1.0
 -- Maximum random time added to SlowBuy (always applied)
 B_AS_SLOWBUY_RANDOM = 0.5
 
+-- Maximum time sync skew in seconds
+B_AS_SYNC_MAXSKEW = 0.5
+
 
 -------------------------------------------------------------------------------
 
@@ -674,7 +677,7 @@ function B_AS_SyncTime()
 		local timePart = mod(GetTime(), B_AS_SCAN_BASE)
 		local timeWait = (B_AS_SCAN_BASE / B_AS_GS["SyncChars"]) * (B_AS_GS["SyncIndex"] - 1)
 
-		if timePart < timeWait or timePart > timeWait + 0.2 then
+		if timePart < timeWait or timePart > timeWait + B_AS_SYNC_MAXSKEW then
 			return false
 		end
 	end
