@@ -64,8 +64,9 @@ B_AS_VarSettings = {
 	["PageLock"]  		= {B_AS_T_BOOL,		true,	B_AS_Button_PageLockToggle,		"LastPage"							},
 	["PageFixed"]  		= {B_AS_T_BOOL,		false,	B_AS_Button_PageFixedToggle,		"FixedPage"							},
 	["WhichPage"]  		= {B_AS_T_NUMBER,	0,	B_AS_Input_WhichPage,											},
-	["IgnoreLowGear"]	= {B_AS_T_BOOL,		true,	B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"							},
-	["LowGearLevel"]	= {B_AS_T_NUMBER,	50,	B_AS_Input_IgnoreLowGearLevel,										},
+	["Sync"]  		= {B_AS_T_BOOL,		false,	B_AS_Button_SyncToggle,			"TimeSync"							},
+	["SyncChars"]  		= {B_AS_T_NUMBER,	1,	B_AS_Input_SyncChars,											},
+	["SyncIndex"]  		= {B_AS_T_NUMBER,	1,	B_AS_Input_SyncIndex,											},
 	["ScanMinQuality"]	= {B_AS_T_LIST,		1,	B_AS_Button_ScanMinQuality,		"Scan Q",		B_AS_QualityList,	1, 5		},
 	["BuyMinQuality"]	= {B_AS_T_LIST,		4,	B_AS_Button_BuyMinQuality,		"Buy Q",		B_AS_QualityList,	1, 5		},
 	["RecipeMinQuality"]	= {B_AS_T_LIST,		5,	B_AS_Button_RecipeMinQuality,		"Recipe Q",		B_AS_QualityList,	1, 5		},
@@ -82,6 +83,8 @@ B_AS_VarSettings = {
 	["OptionPriceQuality4"]	= {B_AS_T_NUMBER,	110000,		B_AS_Input_OptionPriceQuality4,									},
 	["OptionPriceQuality5"]	= {B_AS_T_NUMBER,	2000000,	B_AS_Input_OptionPriceQuality5,									},
 	["OptionPriceQuality6"]	= {B_AS_T_NUMBER,	5000000,	B_AS_Input_OptionPriceQuality6,									},
+	["IgnoreLowGear"]	= {B_AS_T_BOOL,		true,		B_AS_Button_IgnoreLowGearToggle,	"IgnoreLowGear"						},
+	["LowGearLevel"]	= {B_AS_T_NUMBER,	50,		B_AS_Input_IgnoreLowGearLevel,									},
 
 	["Items"] 		= {B_AS_T_MISC,		{},														},
 }
@@ -660,16 +663,26 @@ function B_AS_OnEvent()
 end
 
 function B_AS_SlowBuyTick(currTime)
-
 	if (currTime - B_AS_SlowBuy_LastTime >= B_AS_SlowBuy_WaitTime) then
 		B_AS_SlowBuy_LastTime = currTime
 		B_AS_Buy(false)
-		B_AS_SlowBuy_WaitTime = B_AS_SLOWBUY_BASE + math.random()*B_AS_SLOWBUY_RANDOM
+		B_AS_SlowBuy_WaitTime = B_AS_SLOWBUY_BASE + math.random() * B_AS_SLOWBUY_RANDOM
 	end
+end
+function B_AS_SyncTime()
+	if B_AS_GS["Sync"] == true then
+		local timePart = mod(GetTime(), B_AS_SCAN_BASE)
+		local timeWait = (B_AS_SCAN_BASE / B_AS_GS["SyncChars"]) * (B_AS_GS["SyncIndex"] - 1)
+
+		if timePart < timeWait or timePart > timeWait + 0.2 then
+			return false
+		end
+	end
+	return true
 end
 function B_AS_AutoScanTick(currTime)
 
-	if (CanSendAuctionQuery()) then
+	if (CanSendAuctionQuery() and B_AS_SyncTime()) then
 		B_AS_Scan()
 	end
 end

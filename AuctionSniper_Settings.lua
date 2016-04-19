@@ -134,6 +134,8 @@ B_AS_SpecialsExact = {
 	Format: {Quality,	MinimumStackOfItems}
 ]]
 B_AS_SpecialsExactConditional = {
+	["Encrypted Twilight Text"]				= {4,	150},		-- 0.3g * 150	= 45g
+
 	["Plaguebloom"]						= {4,	20},		-- 2g * 20	= 40g
 	["Mooncloth"]						= {4,	5},		-- 11g * 5	= 55g
 
@@ -142,6 +144,7 @@ B_AS_SpecialsExactConditional = {
 	["Cured Rugged Hide"]					= {4,	8},		-- 6g * 8	= 48g
 	["Refined Deeprock Salt"]				= {4,	8},		-- 6g * 8	= 48g
 
+	["Greater Eternal Essence"]				= {4,	6},		-- 7g?* 6	= 42g
 	["Large Brilliant Shard"]				= {4,	5},		-- 5g * 10	= 50g
 	["Nexus Crystal"]					= {4,	5},		-- 8g * 5	= 40g
 

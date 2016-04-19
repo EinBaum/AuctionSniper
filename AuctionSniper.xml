@@ -157,7 +157,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativePoint="TOP">
 						<Offset>
-							<AbsDimension x="0" y="-37"/>
+							<AbsDimension x="0" y="-30"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -244,7 +244,7 @@
 				</Scripts>
 			</EditBox>
 
-			<Button name="B_AS_Button_IgnoreLowGearToggle" inherits="GameMenuButtonTemplate">
+			<Button name="B_AS_Button_SyncToggle" inherits="GameMenuButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Input_WhichPage">
 						<Offset>
@@ -254,14 +254,14 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						B_AS_ToggleVar("IgnoreLowGear")
+						B_AS_ToggleVar("Sync")
 					</OnClick>
 				</Scripts>
 			</Button>
-			<EditBox name="B_AS_Input_IgnoreLowGearLevel" autoFocus="false" letters="2" inherits="InputBoxTemplate">
+			<EditBox name="B_AS_Input_SyncChars" autoFocus="false" letters="2" inherits="InputBoxTemplate">
 				<Size x="30" y="16" />
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Button_IgnoreLowGearToggle">
+					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Button_SyncToggle">
 						<Offset>
 							<AbsDimension x="0" y="0"/>
 						</Offset>
@@ -269,9 +269,9 @@
 				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
-						<FontString inherits="GameFontHighlightSmall" text="Min. Gear Level:">
+						<FontString inherits="GameFontHighlightSmall" text="Num. Characters:">
 							<Anchors>
-								<Anchor point="RIGHT" relativeTo="B_AS_Input_IgnoreLowGearLevel" relativePoint="LEFT">
+								<Anchor point="RIGHT" relativeTo="B_AS_Input_SyncChars" relativePoint="LEFT">
 									<Offset>
 										<AbsDimension x="-10" y="0"/>
 									</Offset>
@@ -282,14 +282,42 @@
 				</Layers>
 				<Scripts>
 					<OnTextChanged>
-						B_AS_SetVar("LowGearLevel", this:GetText())
+						B_AS_SetVar("SyncChars", this:GetText())
+					</OnTextChanged>
+				</Scripts>
+			</EditBox>
+			<EditBox name="B_AS_Input_SyncIndex" autoFocus="false" letters="2" inherits="InputBoxTemplate">
+				<Size x="30" y="16" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Input_SyncChars">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlightSmall" text="Character Index:">
+							<Anchors>
+								<Anchor point="RIGHT" relativeTo="B_AS_Input_SyncIndex" relativePoint="LEFT">
+									<Offset>
+										<AbsDimension x="-10" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnTextChanged>
+						B_AS_SetVar("SyncIndex", this:GetText())
 					</OnTextChanged>
 				</Scripts>
 			</EditBox>
 
 			<Button name="B_AS_Button_ScanMinQuality" inherits="GameMenuButtonTemplate">
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Input_IgnoreLowGearLevel">
+					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Input_SyncIndex">
 						<Offset>
 							<AbsDimension x="0" y="-15"/>
 						</Offset>
@@ -709,6 +737,49 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+
+			<Button name="B_AS_Button_IgnoreLowGearToggle" inherits="GameMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="-13" y="-30"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						B_AS_ToggleVar("IgnoreLowGear")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<EditBox name="B_AS_Input_IgnoreLowGearLevel" autoFocus="false" letters="2" inherits="InputBoxTemplate">
+				<Size x="30" y="16" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="B_AS_Button_IgnoreLowGearToggle">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlightSmall" text="Min. Gear Level:">
+							<Anchors>
+								<Anchor point="RIGHT" relativeTo="B_AS_Input_IgnoreLowGearLevel" relativePoint="LEFT">
+									<Offset>
+										<AbsDimension x="-10" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnTextChanged>
+						B_AS_SetVar("LowGearLevel", this:GetText())
+					</OnTextChanged>
+				</Scripts>
+			</EditBox>
 		</Frames>
 	</Frame>
 	<Frame name="B_AS_LogBoxContainer" inherits="B_AS_ContainerTemplate" parent="B_AS_Frame" enableMouse="true" hidden="true">
