@@ -51,7 +51,7 @@ Synchronizes the scan time if you have multiple characters scanning the AH.
 **Num. Characters**
 The number of characters that are scanning the AH.
 
-**Num. Characters**
+**Character Index**
 A number ranging from 1 to the number of your characters. It is required to give each character a unique index to use the TimeSync function. Giving two characters the same index number will make them scan the AH at the same time.
 
 **Scan Q**
