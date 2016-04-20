@@ -67,7 +67,7 @@ B_AS_SpecialsExact = {
 	["Illusion Dust"]					= 2,	-- 90s
 	["Gromsblood"]						= 2,	-- 85s
 	["Dreamfoil"]						= 2,	-- 1g
-	["Plaguebloom"]						= 2,	-- 2g
+	["Plaguebloom"]						= 2,	-- 1g
 
 	["Devilsaur Leather"]					= 3,	-- 11g	C
 	["Core Leather"]					= 3,	-- 6g
@@ -138,9 +138,9 @@ B_AS_SpecialsExact = {
 	Format: {Quality,	MinimumStackOfItems}
 ]]
 B_AS_SpecialsExactConditional = {
-	["Encrypted Twilight Text"]				= {4,	150},		-- 0.3g * 150	= 45g
+	["Plaguebloom"]						= {4,	20},		-- 1g * 20	= 20g
 
-	["Plaguebloom"]						= {4,	20},		-- 2g * 20	= 40g
+	["Encrypted Twilight Text"]				= {4,	150},		-- 0.3g * 150	= 45g
 	["Mooncloth"]						= {4,	5},		-- 11g * 5	= 55g
 	["Bloodvine"]						= {4,	5},		-- 12g * 5	= 60g
 
