@@ -1,7 +1,7 @@
 ## Interface: 11200
 ## Title: Auction|cff60ff00Sniper|r
 ## Author: EinBaum https://github.com/EinBaum
-## Version: 1.1
+## Version: 1.2
 ## Notes: Scan and buy items automatically. Define your own filters.
 ## SavedVariables: B_AS_GS
 AuctionSniper.xml
