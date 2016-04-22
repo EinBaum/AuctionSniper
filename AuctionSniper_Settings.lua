@@ -82,6 +82,7 @@ B_AS_SpecialsExact = {
 	["Arcanite Bar"]					= 3,	-- 30g	C
 	["Lava Core"]						= 3,	-- 20g	C
 	["Fiery Core"]						= 3,	-- 20g	C
+	["Righteous Orb"]					= 3,	-- 20g	C
 
 	["Libram of Constitution"]				= 4,	-- 50g
 	["Libram of Voracity"]					= 4,	-- 70g
@@ -158,4 +159,5 @@ B_AS_SpecialsExactConditional = {
 	["Arcanite Bar"]					= {4,	2},		-- 30g * 2	= 60g
 	["Lava Core"]						= {4,	3},		-- 20g * 3	= 60g
 	["Fiery Core"]						= {4,	3},		-- 20g * 3	= 60g
+	["Righteous Orb"]					= {4,	3},		-- 20g * 3	= 60g
 }
