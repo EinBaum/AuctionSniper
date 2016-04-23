@@ -139,7 +139,7 @@ B_AS_SpecialsExact = {
 	Format: {Quality,	MinimumStackOfItems}
 ]]
 B_AS_SpecialsExactConditional = {
-	["Plaguebloom"]						= {4,	20},		-- 1g * 20	= 20g
+	["Plaguebloom"]						= {3,	20},		-- 1g * 20	= 20g
 
 	["Encrypted Twilight Text"]				= {4,	150},		-- 0.3g * 150	= 45g
 	["Mooncloth"]						= {4,	5},		-- 11g * 5	= 55g
