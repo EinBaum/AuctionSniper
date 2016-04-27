@@ -1,5 +1,5 @@
 
-B_AS_VERSION = "1.1"
+B_AS_VERSION = "1.2"
 
 B_AS_RecipeNames = {
 	"Pattern", "Schematic", "Plans", "Recipe", "Manual", "Formula",
