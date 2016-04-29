@@ -141,6 +141,8 @@ B_AS_SpecialsExact = {
 B_AS_SpecialsExactConditional = {
 	["Plaguebloom"]						= {3,	20},		-- 1g * 20	= 20g
 
+	["Essence of Water"]					= {4,   10},		-- 6g *10	= 60g
+	["Essence of Earth"]					= {4,   10},		-- 7.5g * 7	= 52.5g
 	["Encrypted Twilight Text"]				= {4,	150},		-- 0.3g * 150	= 45g
 	["Mooncloth"]						= {4,	5},		-- 11g * 5	= 55g
 	["Bloodvine"]						= {4,	5},		-- 12g * 5	= 60g
